@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap");
+
+.link {
+  color: #1976d2;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+}
+.Loglink,
+.homeLink {
+  text-decoration: none;
+  padding: 5px;
+  font-size: 1.5rem;
+}
+.Loglink:visited {
+  color: #ffffff;
+}
+.Reglink:visited {
+  color: #ffffff;
+}
+.homeLink:visited {
+  color: #ffffff;
+}
+.login {
+  font-family: "Inter", sans-serif;
+}
+.homeButtons {
+  text-decoration: none;
+}
