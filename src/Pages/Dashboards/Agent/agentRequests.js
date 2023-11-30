@@ -443,8 +443,8 @@ const AgentRequests = () => {
                       </div>
                     </Modal.Body>
                     <Modal.Footer className="back-color">
-                      <Button variant="danger">Delete</Button>
-                      <Button variant="success">Mark As Done</Button>
+                      {/* <Button variant="danger">Delete</Button>
+                      <Button variant="success">Mark As Done</Button> */}
                     </Modal.Footer>
                   </Modal>
                   {/* MATCH */}

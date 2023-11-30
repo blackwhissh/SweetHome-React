@@ -136,6 +136,26 @@ const OwnerRequest = () => {
     window.location.href = "http://localhost:3000/owner/properties/agents";
     console.log(request);
   };
+  // Delete Button START
+  const handleDelete = async (propertyId) => {
+    console.log(propertyId);
+    try {
+      const deleteResponse = await axios.post(
+        `http://localhost:8081/api/owner/properties/${propertyId}/delete`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      // console.log(deleteResponse); WORKS
+      window.location.reload();
+    } catch (error) {
+      console.error("delete not Works: ", error);
+    }
+  };
+  // Delete Button END
   return (
     <div className="dashboard">
       <div className="app-container">
@@ -529,30 +549,30 @@ const OwnerRequest = () => {
               </div>
             </div>
             {userData.length > 0 ? (
-              userData[0].map((request, index) => (
-                <div key={request.propertyId}>
+              userData[0].map((property, index) => (
+                <div key={property.propertyId}>
                   <div className="products-row">
                     <div className="product-cell image">
                       <img
                         src={
-                          request.propertyType &&
-                          propertyTypeImages[request.propertyType]
-                            ? propertyTypeImages[request.propertyType]
+                          property.propertyType &&
+                          propertyTypeImages[property.propertyType]
+                            ? propertyTypeImages[property.propertyType]
                             : "default_image_url_if_propertyType_not_found_or_invalid"
                         }
                         alt="product"
                       />
                       <span onClick={() => toggleModal(index)}>
-                        {request.city}
+                        {property.city}
                       </span>
                     </div>
                     <div className="product-cell category ">
                       <span onClick={() => toggleModal(index)}>
-                        {request.district}
+                        {property.district}
                       </span>
                     </div>
                     <div className="product-cell status-cell">
-                      {request.isActive ? (
+                      {property.isActive ? (
                         <span onClick={() => toggleModal(index)}>
                           <div className="status active">Active</div>
                         </span>
@@ -564,27 +584,27 @@ const OwnerRequest = () => {
                     </div>
                     <div className="product-cell category">
                       <span onClick={() => toggleModal(index)}>
-                        {request.transactionType}
+                        {property.transactionType}
                       </span>
                     </div>
 
                     <div className="product-cell category">
                       <span onClick={() => toggleModal(index)}>
-                        {request.propertyType}
+                        {property.propertyType}
                       </span>
                     </div>
                     <div className="product-cell category">
                       <span onClick={() => toggleModal(index)}>
-                        {request.price}$
+                        {property.price}$
                       </span>
                     </div>
                     <div className="product-cell category">
-                      {request.agentId > 0 ? (
-                        <span>{request.agentId}</span>
+                      {property.agentId > 0 ? (
+                        <span>{property.agentId}</span>
                       ) : (
                         <button
                           className="button-33"
-                          onClick={() => goToAgents(request.propertyId)}
+                          onClick={() => goToAgents(property.propertyId)}
                         >
                           Assign Agent
                         </button>
@@ -600,9 +620,9 @@ const OwnerRequest = () => {
                       <img
                         width={"100%"}
                         src={
-                          request.propertyType &&
-                          propertyTypeImages[request.propertyType]
-                            ? propertyTypeImages[request.propertyType]
+                          property.propertyType &&
+                          propertyTypeImages[property.propertyType]
+                            ? propertyTypeImages[property.propertyType]
                             : "default_image_url_if_propertyType_not_found_or_invalid"
                         }
                         alt="product"
@@ -614,31 +634,31 @@ const OwnerRequest = () => {
                           <Col>
                             <div className="center">
                               <span className="bold-info">Property ID: </span>
-                              {request.propertyId}
+                              {property.propertyId}
                             </div>
                             <div className="center">
                               <span className="bold-info">Owner ID: </span>
-                              {request.ownerId}
+                              {property.ownerId}
                             </div>
                           </Col>
                           <Col>
                             <div className="center">
                               <span className="bold-info">City: </span>
-                              {request.city}
+                              {property.city}
                             </div>
                             <div className="center">
                               <span className="bold-info">District: </span>
-                              {request.district}
+                              {property.district}
                             </div>
                           </Col>
                           <Col>
                             <div className="center">
                               <span className="bold-info">Rooms: </span>
-                              {request.rooms}
+                              {property.rooms}
                             </div>
                             <div className="center">
                               <span className="bold-info">Beds: </span>
-                              {request.beds}
+                              {property.beds}
                             </div>
                           </Col>
                         </Row>
@@ -646,33 +666,33 @@ const OwnerRequest = () => {
                           <Col>
                             <div className="center">
                               <span className="bold-info">Average Price: </span>
-                              {request.price}$
+                              {property.price}$
                             </div>
                             <div className="center">
                               <span className="bold-info">Pets:</span>
-                              {request.hasPet ? "Yes" : "No"}
+                              {property.hasPet ? "Yes" : "No"}
                             </div>
                           </Col>
                           <Col>
                             <div className="center">
                               <span className="bold-info">Property Type: </span>
-                              {request.propertyType}
+                              {property.propertyType}
                             </div>
                             <div className="center">
                               <span className="bold-info">
                                 Transaction Type:{" "}
                               </span>
-                              {request.transactionType}
+                              {property.transactionType}
                             </div>
                           </Col>
                           <Col>
                             <div className="center">
                               <span className="bold-info">Start Date: </span>
-                              {request.startDate}
+                              {property.startDate}
                             </div>
                             <div className="center">
                               <span className="bold-info">End Date: </span>
-                              {request.endDate}
+                              {property.endDate}
                             </div>
                           </Col>
                         </Row>
@@ -681,11 +701,16 @@ const OwnerRequest = () => {
 
                       <div className="info">
                         <span className="bold-info">Info: </span>
-                        <span className="additional-info">{request.info}</span>
+                        <span className="additional-info">{property.info}</span>
                       </div>
                     </Modal.Body>
                     <Modal.Footer className="back-color">
-                      <Button variant="danger">Delete</Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDelete(property.propertyId)}
+                      >
+                        Delete
+                      </Button>
                       <Button variant="success">Mark As Done</Button>
                     </Modal.Footer>
                   </Modal>

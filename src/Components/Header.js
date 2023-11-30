@@ -21,7 +21,7 @@ function ResponsiveAppBar() {
   return (
     <ThemeProvider theme={darkTheme}>
       <AppBar position="static">
-        <Container maxWidth="full">
+        <Container maxWidth="full" sx={{ height: 55 }}>
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
 
@@ -31,11 +31,10 @@ function ResponsiveAppBar() {
               component="a"
               href="#app-bar-with-responsive-menu"
               sx={{
-                mr: 8,
                 display: { xs: "none", md: "flex" },
                 fontFamily: "monospace",
                 fontWeight: 800,
-                letterSpacing: ".4rem",
+
                 color: "inherit",
                 textDecoration: "none",
               }}
@@ -44,31 +43,11 @@ function ResponsiveAppBar() {
               Sweet Home
             </NavLink>
 
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              Home
-            </Typography>
+            <AdbIcon sx={{ display: { xs: "flex", md: "none" } }} />
+
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
-                <Button
-                  key={page}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
+                <Button key={page} sx={{ color: "white", display: "block" }}>
                   {page}
                 </Button>
               ))}

@@ -71,7 +71,7 @@ export default function SignInSide() {
   return (
     <div className="login">
       <Header></Header>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid container component="main">
         <CssBaseline />
         <Grid
           item
@@ -79,6 +79,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
+            height: "100vh",
             backgroundImage:
               "url(https://source.unsplash.com/random?wallpapers)",
             backgroundRepeat: "no-repeat",

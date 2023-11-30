@@ -1,0 +1,51 @@
+body {
+  background-color: #212529;
+  color: white;
+}
+#apple {
+  position: relative;
+  margin: 0 0 0 0;
+}
+
+.tiktok svg path,
+.youtube svg path,
+.twitter svg path,
+.facebook svg path,
+.insta svg path {
+  fill: white;
+}
+
+.tiktok:hover svg path,
+.youtube:hover svg path,
+.twitter:hover svg path,
+.facebook:hover svg path,
+.insta:hover svg path {
+  fill: #ff3e3b;
+}
+.myBottom {
+  position: relative;
+  margin-top: auto;
+}
+
+#apple {
+  background-position: center;
+}
+.myHover:hover {
+  color: white;
+}
+.default-color {
+  color: white;
+}
+.faraway {
+  padding: 1%;
+}
+.copyRight {
+  margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: 0.01071em;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}

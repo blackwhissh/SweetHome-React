@@ -25,6 +25,8 @@ import Home from "./Pages/Home";
 // import FAQ from "./Pages/FAQ";
 // import Contact from "./Pages/Contact";
 import AgentRequests from "./Pages/Dashboards/Agent/agentRequests";
+import AgentProperties from "./Pages/Dashboards/Agent/agentProperties";
+
 import ClientRequest from "./Pages/Dashboards/Client/clientRequests";
 import ErrorPage from "./Pages/error-page";
 import OwnerProperties from "./Pages/Dashboards/Owner/ownerProperties";
@@ -49,6 +51,7 @@ const router = createBrowserRouter(
       <Route path="owner/properties/agents" element={<ShowAgentsOwner />} />
 
       <Route path="agent/requests/active" element={<AgentRequests />} />
+      <Route path="agent/properties/active" element={<AgentProperties />} />
 
       <Route path="Owner" element={<Owner />} />
       <Route path="Login" element={<Login />} />

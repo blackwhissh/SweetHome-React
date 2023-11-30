@@ -7,16 +7,18 @@ import {
 import "../../../Css/Dashboard.css";
 import "../../../Css/CustomModal.css";
 import { Modal } from "react-bootstrap";
-import UserSideBar from "../../../Components/UserSideBar";
+import UserSideBarAgent from "../../../Components/UserSideBarAgent";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
 import axios from "axios";
+
 import { Button } from "react-bootstrap";
 import { Logout } from "@mui/icons-material";
 
-const ClientRequest = () => {
+const AgentProperties = () => {
+  let accessToken = localStorage.getItem("accessToken");
+
   //  importing refreshToken and accessToken auth START  //
   const [userData, setUserData] = useState([]);
   useEffect(() => {
@@ -40,59 +42,6 @@ const ClientRequest = () => {
     setShowModal(newShowModal);
   };
   // Showing Modals From Server END
-  // Showing Modals  Add Request on Page START
-  const [addRequest, setAddRequest] = useState(false);
-  const handleClose = () => setAddRequest(false);
-  const handleShow = () => setAddRequest(true);
-  // Showing Modals  Add Request on Page END
-
-  // Adding Request START
-
-  const [formData, setFormData] = useState({
-    minPrice: "",
-    maxPrice: "",
-    hasPet: false,
-    city: "",
-    district: "",
-    rooms: "",
-    beds: "",
-    info: "",
-    propertyType: "",
-    transactionType: "",
-  });
-  const handleSubmit = async (event) => {
-    let accessToken = localStorage.getItem("accessToken");
-    event.preventDefault();
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8081/api/client/requests/add",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log("successfully added: ", response.data);
-      window.location.reload();
-    } catch (error) {
-      console.log(`some error: ${error}`);
-    }
-  };
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (type === "radio" && name === "hasPet") {
-      setFormData({ ...formData, hasPet: value === "true" });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: type === "checkbox" ? checked : value,
-      });
-    }
-  };
-  // Adding Request END
-
   // Requests Images START
   const propertyTypeImages = {
     HOUSING:
@@ -106,278 +55,43 @@ const ClientRequest = () => {
       "https://cf.bstatic.com/xdata/images/hotel/max1024x768/267262611.jpg?k=c5202738fb9f021dcd0d0daa060d88d39eb60e27afd35f20b5d6b117d2849d88&o=&hp=1",
   };
   // Requests Images END
-  let accessToken = localStorage.getItem("accessToken");
-  const [agentData, setAgentData] = useState([]);
-  const [showAgent, setShowAgent] = useState(false);
 
-  const fetchAgentData = async () => {
+  // Match START
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const [match, setMatch] = useState({});
+  const fetchData = async (propertyId) => {
     try {
-      const agentResponse = await axios.get(
-        "http://localhost:8081/api/client/requests/agents",
+      const matchResponse = await axios.get(
+        `http://localhost:8081/api/agent/properties/${propertyId}/match`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-      setAgentData(agentResponse.data);
+      handleShow();
+      setMatch(matchResponse.data);
+      console.log(matchResponse.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
-  useEffect(() => {
-    if (showAgent) {
-      fetchAgentData();
-    }
-  }, []);
 
-  const goToAgents = (requestId) => {
-    let request = localStorage.setItem("requestId", requestId);
-    window.location.href = "http://localhost:3000/client/requests/agents";
-    console.log(request);
-  };
-  // Mark as Done Start
-  const handleMarkAsDone = async (requestId, score) => {
-    console.log(requestId);
-    try {
-      const markResponse = await axios.put(
-        `http://localhost:8081/api/client/requests/${requestId}/done?agentId=${score}`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log("Assignment Response:", markResponse);
-    } catch (error) {
-      console.error("does not work getting error: ", error);
-    }
-  };
-  // Mark As Done END
-
-  // Delete Button START
-  const handleDelete = async (requestId) => {
-    console.log(requestId);
-    try {
-      const deleteResponse = await axios.post(
-        `http://localhost:8081/api/client/requests/${requestId}/delete`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      // console.log(deleteResponse); WORKS
-      window.location.reload();
-    } catch (error) {
-      console.error("delete not Works: ", error);
-    }
-  };
-  // Delete Button END
+  // Match END
 
   return (
     <div className="dashboard">
       <div className="app-container">
-        <UserSideBar></UserSideBar>
+        <UserSideBarAgent></UserSideBarAgent>
         <div className="app-content">
           <div className="app-content-header">
-            <h1 className="app-content-headerText">Requests</h1>
+            <h1 className="app-content-headerText">Available Properties</h1>
           </div>
           <div className="app-content-actions">
             <input className="search-bar" placeholder="Search..." type="text" />
-
-            <button className="button-64" onClick={handleShow}>
-              <span className="text">Add Request</span>
-            </button>
-
-            <Modal show={addRequest} onHide={handleClose} size="xl">
-              <Modal.Header className="center back-color">
-                <Modal.Title>
-                  <span className="modal-title">Adding Request</span>
-                </Modal.Title>
-              </Modal.Header>
-              <Modal.Body className="back-color">
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <Row>
-                      <Col>
-                        <div className="center">
-                          <Form.Control
-                            className="placeholder-color back-color input-modal"
-                            type="text"
-                            name="city"
-                            id="city"
-                            placeholder="City"
-                            value={formData.city}
-                            onChange={handleChange}
-                          />
-                        </div>
-                        <div className="center">
-                          <Form.Control
-                            className="placeholder-color input-modal"
-                            type="text"
-                            name="district"
-                            id="district"
-                            placeholder="District"
-                            value={formData.district}
-                            onChange={handleChange}
-                          />{" "}
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="center">
-                          <Form.Control
-                            className="placeholder-color input-modal"
-                            type="number"
-                            name="rooms"
-                            id="rooms"
-                            placeholder="Number Of Rooms"
-                            value={formData.rooms}
-                            onChange={handleChange}
-                          />{" "}
-                        </div>
-                        <div className="center">
-                          <Form.Control
-                            className="placeholder-color input-modal"
-                            type="number"
-                            name="beds"
-                            id="beds"
-                            placeholder="Number Of Beds"
-                            value={formData.beds}
-                            onChange={handleChange}
-                          />{" "}
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <div className="select-div center">
-                          <label className="select-label">
-                            Choose Property Type:
-                          </label>
-                          <Form.Select
-                            className="back-color select-type"
-                            onChange={handleChange}
-                            name="propertyType"
-                            value={formData.propertyType}
-                          >
-                            <option>Choose one</option>
-                            <option value="HOTEL">Hotel</option>
-                            <option value="APARTMENT">Apartment</option>
-                            <option value="HOUSING">House</option>
-                            <option value="COMMERCIAL">Commercial</option>
-                            <option value="LAND">Land</option>
-                          </Form.Select>
-                        </div>
-                      </Col>
-
-                      <Col>
-                        <div className="hasPet-group center">
-                          <label className="question">Do You Have Pets:</label>
-                          <label className="hasPet-label">
-                            <input
-                              type="radio"
-                              name="hasPet"
-                              id="noPet"
-                              onChange={handleChange}
-                              value="false"
-                              defaultChecked
-                            />
-                            <span>No Pet</span>
-                          </label>
-                          <label className="hasPet-label">
-                            <input
-                              type="radio"
-                              name="hasPet"
-                              id="yesPet"
-                              value="true"
-                              onChange={handleChange}
-                            />
-                            <span>Has Pet</span>
-                          </label>
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <div className="center">
-                          <Form.Control
-                            className="placeholder-color input-modal"
-                            type="number"
-                            name="minPrice"
-                            id="minPrice"
-                            placeholder="Min Price"
-                            value={formData.minPrice}
-                            onChange={handleChange}
-                          />{" "}
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="center">
-                          <Form.Control
-                            className="placeholder-color input-modal"
-                            type="Number"
-                            name="maxPrice"
-                            id="maxPrice"
-                            placeholder="Max Price"
-                            value={formData.maxPrice}
-                            onChange={handleChange}
-                          />{" "}
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <div className="hasPet-group center">
-                          <label className="question">Transaction Type:</label>
-                          <label className="hasPet-label">
-                            <input
-                              type="radio"
-                              name="transactionType"
-                              id="rent"
-                              onChange={handleChange}
-                              value="RENT"
-                            />
-                            <span>Rent</span>
-                          </label>
-                          <label className="hasPet-label">
-                            <input
-                              type="radio"
-                              name="transactionType"
-                              id="buy"
-                              value="BUY"
-                              onChange={handleChange}
-                            />
-                            <span>Buy</span>
-                          </label>
-                        </div>
-                      </Col>
-                    </Row>
-                    <Form.Label>
-                      Info <sup className="optional">Optional*</sup>
-                    </Form.Label>
-                    <Form.Control
-                      className="back-color"
-                      as="textarea"
-                      name="info"
-                      onChange={handleChange}
-                      value={formData.info}
-                      rows={3}
-                    />
-                  </Form.Group>
-                </Form>
-              </Modal.Body>
-              <Modal.Footer className="back-color">
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-                <Button variant="primary" type="submit" onClick={handleSubmit}>
-                  Save Changes
-                </Button>
-              </Modal.Footer>
-            </Modal>
 
             <div className="app-content-actions-wrapper">
               <div className="filter-button-wrapper">
@@ -570,30 +284,30 @@ const ClientRequest = () => {
               </div>
             </div>
             {userData.length > 0 ? (
-              userData[0].map((request, index) => (
-                <div key={request.requestId}>
+              userData[0].map((property, index) => (
+                <div key={property.propertyID}>
                   <div className="products-row">
                     <div className="product-cell image">
                       <img
                         src={
-                          request.propertyType &&
-                          propertyTypeImages[request.propertyType]
-                            ? propertyTypeImages[request.propertyType]
+                          property.propertyType &&
+                          propertyTypeImages[property.propertyType]
+                            ? propertyTypeImages[property.propertyType]
                             : "default_image_url_if_propertyType_not_found_or_invalid"
                         }
                         alt="product"
-                      />
+                      />{" "}
                       <span onClick={() => toggleModal(index)}>
-                        {request.city}
+                        {property.city}
                       </span>
                     </div>
                     <div className="product-cell category ">
                       <span onClick={() => toggleModal(index)}>
-                        {request.district}
+                        {property.district}
                       </span>
                     </div>
                     <div className="product-cell status-cell">
-                      {request.isActive ? (
+                      {property.isActive ? (
                         <span onClick={() => toggleModal(index)}>
                           <div className="status active">Active</div>
                         </span>
@@ -605,30 +319,30 @@ const ClientRequest = () => {
                     </div>
                     <div className="product-cell category">
                       <span onClick={() => toggleModal(index)}>
-                        {request.transactionType}
+                        {property.transactionType}
                       </span>
                     </div>
 
                     <div className="product-cell category">
                       <span onClick={() => toggleModal(index)}>
-                        {request.propertyType}
+                        {property.propertyType}
                       </span>
                     </div>
                     <div className="product-cell category">
                       <span onClick={() => toggleModal(index)}>
-                        {Math.round((request.minPrice + request.maxPrice) / 2)}${" "}
+                        {property.price}${" "}
                       </span>
                     </div>
                     <div className="product-cell category">
-                      {request.agentId > 0 ? (
-                        <span>{request.agentId}</span>
-                      ) : (
+                      {property.agentId > 0 ? (
                         <button
                           className="button-33"
-                          onClick={() => goToAgents(request.requestId)}
+                          onClick={() => fetchData(property.propertyId)}
                         >
-                          Assign Agent
+                          Property {property.propertyId} Match
                         </button>
+                      ) : (
+                        <span>{property.agentId}</span>
                       )}
                     </div>
                   </div>
@@ -641,9 +355,9 @@ const ClientRequest = () => {
                       <img
                         width={"100%"}
                         src={
-                          request.propertyType &&
-                          propertyTypeImages[request.propertyType]
-                            ? propertyTypeImages[request.propertyType]
+                          property.propertyType &&
+                          propertyTypeImages[property.propertyType]
+                            ? propertyTypeImages[property.propertyType]
                             : "default_image_url_if_propertyType_not_found_or_invalid"
                         }
                         alt="product"
@@ -654,69 +368,66 @@ const ClientRequest = () => {
                         <Row>
                           <Col>
                             <div className="center">
-                              <span className="bold-info">Request ID: </span>
-                              {request.requestId}
+                              <span className="bold-info">Property ID: </span>
+                              {property.propertyId}
                             </div>
                             <div className="center">
-                              <span className="bold-info">Client ID: </span>
-                              {request.clientId}
+                              <span className="bold-info">Owner ID: </span>
+                              {property.ownerId}
                             </div>
                           </Col>
                           <Col>
                             <div className="center">
                               <span className="bold-info">City: </span>
-                              {request.city}
+                              {property.city}
                             </div>
                             <div className="center">
                               <span className="bold-info">District: </span>
-                              {request.district}
+                              {property.district}
                             </div>
                           </Col>
                           <Col>
                             <div className="center">
                               <span className="bold-info">Rooms: </span>
-                              {request.rooms}
+                              {property.rooms}
                             </div>
                             <div className="center">
                               <span className="bold-info">Beds: </span>
-                              {request.beds}
+                              {property.beds}
                             </div>
                           </Col>
                         </Row>
                         <Row className="farther">
                           <Col>
-                            <div className="center">
+                            <div className="center ">
                               <span className="bold-info">Average Price: </span>
-                              {Math.round(
-                                (request.minPrice + request.maxPrice) / 2
-                              )}
-                              $
+                              {property.price}$
                             </div>
                             <div className="center">
                               <span className="bold-info">Pets:</span>
-                              {request.hasPet ? "Yes" : "No"}
+                              {property.hasPet ? "Yes" : "No"}
                             </div>
                           </Col>
                           <Col>
                             <div className="center">
                               <span className="bold-info">Property Type: </span>
-                              {request.propertyType}
+                              {property.propertyType}
                             </div>
                             <div className="center">
                               <span className="bold-info">
                                 Transaction Type:{" "}
                               </span>
-                              {request.transactionType}
+                              {property.transactionType}
                             </div>
                           </Col>
                           <Col>
                             <div className="center">
                               <span className="bold-info">Start Date: </span>
-                              {request.startDate}
+                              {property.startDate}
                             </div>
                             <div className="center">
-                              <span className="bold-info">End Date: </span>
-                              {request.endDate}
+                              <span className="bold-info">Area: </span>
+                              {property.area}
                             </div>
                           </Col>
                         </Row>
@@ -725,21 +436,39 @@ const ClientRequest = () => {
 
                       <div className="info">
                         <span className="bold-info">Info: </span>
-                        <span className="additional-info">{request.info}</span>
+                        <span className="additional-info">{property.info}</span>
                       </div>
                     </Modal.Body>
                     <Modal.Footer className="back-color">
-                      <Button
-                        variant="danger"
-                        onClick={() => handleDelete(request.requestId)}
-                      >
-                        Delete
+                      {/* <Button variant="danger">Delete</Button>
+                      <Button variant="success">Mark As Done</Button> */}
+                    </Modal.Footer>
+                  </Modal>
+                  {/* MATCH */}
+                  <Modal size="xl" show={show} onHide={handleClose}>
+                    <Modal.Header className="back-color">
+                      <Modal.Title>Modal heading</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="back-color">
+                      {show && (
+                        <div>
+                          <h2>Match Details:</h2>
+                          <ul>
+                            {Object.keys(match).map((key) => (
+                              <div key={key} className="inline-object">
+                                <strong>{key}:</strong>
+                              </div>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </Modal.Body>
+                    <Modal.Footer className="back-color">
+                      <Button variant="secondary" onClick={handleClose}>
+                        Close
                       </Button>
-                      <Button
-                        variant="success"
-                        onClick={() => handleMarkAsDone(request.requestId, 10)}
-                      >
-                        Mark As Done
+                      <Button variant="primary" onClick={handleClose}>
+                        Save Changes
                       </Button>
                     </Modal.Footer>
                   </Modal>
@@ -775,4 +504,4 @@ const ClientRequest = () => {
   );
 };
 
-export default ClientRequest;
+export default AgentProperties;

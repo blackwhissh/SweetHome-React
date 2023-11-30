@@ -38,8 +38,12 @@ export const fetchUserData = async (
   try {
     let currentRole = localStorage.getItem("userRole");
     let endPoint = `http://localhost:8081/api/${currentRole}`;
-    if (window.location.pathname.includes("/properties/all")) {
-      endPoint += "/properties/all";
+    if (window.location.pathname.includes("/properties")) {
+      if (window.location.pathname.includes("/properties/all")) {
+        endPoint += "/properties/all";
+      } else {
+        endPoint += "/properties/active";
+      }
     } else if (window.location.pathname.includes("/requests/active")) {
       endPoint += "/requests/active";
     } else if (window.location.pathname.includes("/requests/all")) {
@@ -47,6 +51,7 @@ export const fetchUserData = async (
     } else if (window.location.pathname.includes("/requests/agents")) {
       endPoint += "/requests/agents";
     }
+    // console.log(endPoint);
     const response = await axios.get(endPoint, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
