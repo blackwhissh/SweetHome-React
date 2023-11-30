@@ -7,6 +7,11 @@ const RegistrationForm = () => {
     lastName: "asd",
     email: "asd@gmail.com",
     password: "12345678999",
+    // 123456789990
+    // eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWthQGdtYWlsLmNvbSIsImlhdCI6MTcwMDkzMjUxNCwiZXhwIjoxNzAwOTMyNTI2fQ.l8h8i-Uwj0lZuzwuqpkoDsP4zUJ6URz7tcRWyhB0hQE
+    // eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWthQGdtYWlsLmNvbSIsImlhdCI6MTcwMDkzMjU1NSwiZXhwIjoxNzAwOTMyNTY3fQ.WrfeVXRE349cO6AqTpQakR8VljW7Tvo5WlDUpSpx278
+    //aasd@gmail.com
+    // 12345678
     gender: "MALE",
     phone: "593141427",
     nationality: "georgia",

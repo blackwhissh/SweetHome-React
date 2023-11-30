@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import Header from "../../Components/Header";
+import "../../Css/Registration.css";
 function Copyright(props) {
   return (
     <Typography
@@ -62,7 +63,11 @@ export default function SignInSide() {
       console.error("login error:", error);
     }
   };
+  if (localStorage.getItem("userRole")) {
+    let currentRole = localStorage.getItem("userRole");
 
+    window.location.href = `http://localhost:3000/${currentRole}`;
+  }
   return (
     <div className="login">
       <Header></Header>
@@ -132,7 +137,8 @@ export default function SignInSide() {
                 onChange={handleChange}
               />
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={<Checkbox value="remember" />}
+                className="text-black"
                 label="Remember me"
               />
               <Button

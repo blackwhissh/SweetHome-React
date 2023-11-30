@@ -7,7 +7,7 @@ import {
 import "../../../Css/Dashboard.css";
 import "../../../Css/CustomModal.css";
 import { Modal } from "react-bootstrap";
-import UserSideBar from "../../../Components/UserSideBar";
+import UserSideBarOwner from "../../../Components/UserSideBarOwner";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -16,7 +16,7 @@ import axios from "axios";
 import { Button } from "react-bootstrap";
 import { Logout } from "@mui/icons-material";
 
-const ClientRequest = () => {
+const OwnerRequest = () => {
   //  importing refreshToken and accessToken auth START  //
   const [userData, setUserData] = useState([]);
   useEffect(() => {
@@ -49,8 +49,8 @@ const ClientRequest = () => {
   // Adding Request START
 
   const [formData, setFormData] = useState({
-    minPrice: "",
-    maxPrice: "",
+    price: "",
+    area: "",
     hasPet: false,
     city: "",
     district: "",
@@ -66,7 +66,7 @@ const ClientRequest = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/client/requests/add",
+        "http://localhost:8081/api/owner/properties/add",
         formData,
         {
           headers: {
@@ -113,7 +113,7 @@ const ClientRequest = () => {
   const fetchAgentData = async () => {
     try {
       const agentResponse = await axios.get(
-        "http://localhost:8081/api/client/requests/agents",
+        "http://localhost:8081/api/owner/properties/agents",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -131,32 +131,15 @@ const ClientRequest = () => {
     }
   }, []);
 
-  const goToAgents = (requestId) => {
-    let request = localStorage.setItem("requestId", requestId);
-    window.location.href = "http://localhost:3000/client/requests/agents";
+  const goToAgents = (propertyId) => {
+    let request = localStorage.setItem("propertyId", propertyId);
+    window.location.href = "http://localhost:3000/owner/properties/agents";
     console.log(request);
-  };
-  const handleMarkAsDone = async (requestId, score) => {
-    console.log(requestId);
-    try {
-      const markResponse = await axios.put(
-        `http://localhost:8081/api/client/requests/${requestId}/done?agentId=${score}`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log("Assignment Response:", markResponse);
-    } catch (error) {
-      console.error("does not work getting error: ", error);
-    }
   };
   return (
     <div className="dashboard">
       <div className="app-container">
-        <UserSideBar></UserSideBar>
+        <UserSideBarOwner></UserSideBarOwner>
         <div className="app-content">
           <div className="app-content-header">
             <h1 className="app-content-headerText">Requests</h1>
@@ -165,13 +148,13 @@ const ClientRequest = () => {
             <input className="search-bar" placeholder="Search..." type="text" />
 
             <button className="button-64" onClick={handleShow}>
-              <span className="text">Add Request</span>
+              <span className="text">Add Property</span>
             </button>
 
             <Modal show={addRequest} onHide={handleClose} size="xl">
               <Modal.Header className="center back-color">
                 <Modal.Title>
-                  <span className="modal-title">Adding Request</span>
+                  <span className="modal-title">Adding Properties</span>
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body className="back-color">
@@ -282,10 +265,10 @@ const ClientRequest = () => {
                           <Form.Control
                             className="placeholder-color input-modal"
                             type="number"
-                            name="minPrice"
-                            id="minPrice"
-                            placeholder="Min Price"
-                            value={formData.minPrice}
+                            name="price"
+                            id="price"
+                            placeholder="Price"
+                            value={formData.price}
                             onChange={handleChange}
                           />{" "}
                         </div>
@@ -295,10 +278,10 @@ const ClientRequest = () => {
                           <Form.Control
                             className="placeholder-color input-modal"
                             type="Number"
-                            name="maxPrice"
-                            id="maxPrice"
-                            placeholder="Max Price"
-                            value={formData.maxPrice}
+                            name="area"
+                            id="area"
+                            placeholder="Area"
+                            value={formData.area}
                             onChange={handleChange}
                           />{" "}
                         </div>
@@ -547,7 +530,7 @@ const ClientRequest = () => {
             </div>
             {userData.length > 0 ? (
               userData[0].map((request, index) => (
-                <div key={request.requestId}>
+                <div key={request.propertyId}>
                   <div className="products-row">
                     <div className="product-cell image">
                       <img
@@ -592,7 +575,7 @@ const ClientRequest = () => {
                     </div>
                     <div className="product-cell category">
                       <span onClick={() => toggleModal(index)}>
-                        {Math.round((request.minPrice + request.maxPrice) / 2)}${" "}
+                        {request.price}$
                       </span>
                     </div>
                     <div className="product-cell category">
@@ -601,7 +584,7 @@ const ClientRequest = () => {
                       ) : (
                         <button
                           className="button-33"
-                          onClick={() => goToAgents(request.requestId)}
+                          onClick={() => goToAgents(request.propertyId)}
                         >
                           Assign Agent
                         </button>
@@ -630,12 +613,12 @@ const ClientRequest = () => {
                         <Row>
                           <Col>
                             <div className="center">
-                              <span className="bold-info">Request ID: </span>
-                              {request.requestId}
+                              <span className="bold-info">Property ID: </span>
+                              {request.propertyId}
                             </div>
                             <div className="center">
-                              <span className="bold-info">Client ID: </span>
-                              {request.clientId}
+                              <span className="bold-info">Owner ID: </span>
+                              {request.ownerId}
                             </div>
                           </Col>
                           <Col>
@@ -663,10 +646,7 @@ const ClientRequest = () => {
                           <Col>
                             <div className="center">
                               <span className="bold-info">Average Price: </span>
-                              {Math.round(
-                                (request.minPrice + request.maxPrice) / 2
-                              )}
-                              $
+                              {request.price}$
                             </div>
                             <div className="center">
                               <span className="bold-info">Pets:</span>
@@ -706,12 +686,7 @@ const ClientRequest = () => {
                     </Modal.Body>
                     <Modal.Footer className="back-color">
                       <Button variant="danger">Delete</Button>
-                      <Button
-                        variant="success"
-                        onClick={() => handleMarkAsDone(request.requestId, 10)}
-                      >
-                        Mark As Done
-                      </Button>
+                      <Button variant="success">Mark As Done</Button>
                     </Modal.Footer>
                   </Modal>
                 </div>
@@ -746,4 +721,4 @@ const ClientRequest = () => {
   );
 };
 
-export default ClientRequest;
+export default OwnerRequest;

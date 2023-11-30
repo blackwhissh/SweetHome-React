@@ -41,15 +41,15 @@ function Copyright(props) {
 export default function SignUp() {
   // input fields
   const [formData, setFormData] = useState({
-    firstName: "asd",
-    lastName: "asd",
-    email: "asd@gmail.com",
+    firstName: "",
+    lastName: "",
+    email: "",
     password: "",
     MatchPassword: "",
-    gender: "MALE",
-    phone: "593141427",
-    nationality: "georgia",
-    age: "65",
+    gender: "",
+    phone: "",
+    nationality: "",
+    age: "",
   });
 
   // handling validation set error for required fields
@@ -170,13 +170,14 @@ export default function SignUp() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/register/Agent",
+        "http://localhost:8081/api/register/agent",
         formData
       );
       console.log("Registration successful:", response.data);
       window.location.href = "http://localhost:3000/login";
     } catch (error) {
       console.error("Registration error:", error);
+      // Handle error (e.g., show an error message)
     }
   };
   return (
@@ -186,6 +187,10 @@ export default function SignUp() {
         <Button
           variant="contained"
           sx={{
+            alignItems: "center",
+            display: "flex",
+            marginLeft: 9,
+            justifyContent: "center",
             background: "linear-gradient(45deg, #FF3366 30%, #FF9933 90%)",
             borderRadius: "3px",
             border: 0,
@@ -299,11 +304,21 @@ export default function SignUp() {
                       onChange={handleChange}
                     >
                       <FormControlLabel
+                        sx={{
+                          display: "inline-block",
+                          alignItems: "center",
+                          color: "black",
+                        }}
                         control={<Radio />}
                         label="Male"
                         value="MALE"
                       />
                       <FormControlLabel
+                        sx={{
+                          display: "inline-block",
+                          alignItems: "center",
+                          color: "black",
+                        }}
                         control={<Radio />}
                         label="Female"
                         value="FEMALE"
@@ -412,6 +427,11 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
+                  sx={{
+                    display: "inline-block",
+                    alignItems: "center",
+                    color: "black",
+                  }}
                   control={
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }

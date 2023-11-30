@@ -21,13 +21,17 @@ import Owner from "./Pages/Dashboards/Owner/Owner";
 import Agent from "./Pages/Dashboards/Agent/Agent";
 
 import Home from "./Pages/Home";
-import About from "./Pages/About";
-import FAQ from "./Pages/FAQ";
-import Contact from "./Pages/Contact";
+// import About from "./Pages/About";
+// import FAQ from "./Pages/FAQ";
+// import Contact from "./Pages/Contact";
+import AgentRequests from "./Pages/Dashboards/Agent/agentRequests";
 import ClientRequest from "./Pages/Dashboards/Client/clientRequests";
 import ErrorPage from "./Pages/error-page";
+import OwnerProperties from "./Pages/Dashboards/Owner/ownerProperties";
+import ShowAgentsOwner from "./Pages/Dashboards/Owner/ShowAgentsOwner";
 // Layouts
 import Layout from "./Layouts/Layout";
+import ShowAgents from "./Pages/Dashboards/Client/ShowAgents";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,11 +41,18 @@ const router = createBrowserRouter(
       <Route path="RegOwner" element={<RegOwner />} />
       <Route path="RegAgent" element={<RegAgent />} />
       <Route path="client" element={<Client />} />
-      <Route path="client/request" element={<ClientRequest />} />
+
+      <Route path="client/requests/all" element={<ClientRequest />} />
+      <Route path="client/requests/agents" element={<ShowAgents />} />
+
+      <Route path="owner/properties/all" element={<OwnerProperties />} />
+      <Route path="owner/properties/agents" element={<ShowAgentsOwner />} />
+
+      <Route path="agent/requests/active" element={<AgentRequests />} />
+
       <Route path="Owner" element={<Owner />} />
       <Route path="Login" element={<Login />} />
       <Route path="Agent" element={<Agent />} />
-      <Route path="about" element={<About />} />
       <Route path="RegistrationForm" element={<RegistrationForm />} />
       <Route path="*" element={<ErrorPage />} />
     </Route>
