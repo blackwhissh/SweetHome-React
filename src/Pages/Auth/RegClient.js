@@ -175,6 +175,7 @@ export default function SignUp() {
       );
       console.log("Registration successful:", response.data);
       window.location.href = "http://localhost:3000/login";
+      localStorage.clear();
     } catch (error) {
       console.error("Registration error:", error);
       // Handle error (e.g., show an error message)
