@@ -17,6 +17,24 @@ import { Button } from "react-bootstrap";
 import { Logout } from "@mui/icons-material";
 
 const OwnerRequest = () => {
+  const handleMarkAsDone = async (propertyId, score) => {
+    console.log(propertyId);
+    try {
+      const markResponse = await axios.put(
+        `http://localhost:8081/api/client/requests/${propertyId}/done?score=${score}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      window.location.reload();
+      console.log("Assignment Response:", markResponse);
+    } catch (error) {
+      console.error("does not work getting error: ", error);
+    }
+  };
   //  importing refreshToken and accessToken auth START  //
   const [userData, setUserData] = useState([]);
   useEffect(() => {
@@ -162,7 +180,7 @@ const OwnerRequest = () => {
         <UserSideBarOwner></UserSideBarOwner>
         <div className="app-content">
           <div className="app-content-header">
-            <h1 className="app-content-headerText">Requests</h1>
+            <h1 className="app-content-headerText">Properties</h1>
           </div>
           <div className="app-content-actions">
             <input className="search-bar" placeholder="Search..." type="text" />
@@ -711,7 +729,19 @@ const OwnerRequest = () => {
                       >
                         Delete
                       </Button>
-                      <Button variant="success">Mark As Done</Button>
+                      {property.isActive ? <Button
+                        variant="success"
+                        onClick={() => handleMarkAsDone(property.propertyId, 5)}
+                      >
+                        Mark As Done
+                      </Button> : 
+                      <Button
+                      disabled
+                      variant="success"
+                      onClick={() => handleMarkAsDone(property.propertyId, 5)}
+                    >
+                      Mark As Done
+                    </Button>}
                     </Modal.Footer>
                   </Modal>
                 </div>

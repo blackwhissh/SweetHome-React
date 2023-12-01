@@ -62,7 +62,7 @@ const ShowAgents = () => {
       console.log("Agent ID:", agentId);
       console.log("Type of Agent ID:", typeof agentId);
 
-      const assignResponse = await axios.put(
+      const assignResponse = await axios.post(
         `http://localhost:8081/api/owner/properties/${propertyId}/assign?agentId=${agentId}`,
         null,
         {
@@ -428,7 +428,6 @@ const ShowAgents = () => {
                     </Modal.Body>
                     <Modal.Footer className="back-color">
                       <Button variant="danger">Delete</Button>
-                      <Button variant="success">Mark As Done</Button>
                     </Modal.Footer>
                   </Modal>
                 </div>

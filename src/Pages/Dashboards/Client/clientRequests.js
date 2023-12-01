@@ -141,7 +141,7 @@ const ClientRequest = () => {
     console.log(requestId);
     try {
       const markResponse = await axios.put(
-        `http://localhost:8081/api/client/requests/${requestId}/done?agentId=${score}`,
+        `http://localhost:8081/api/client/requests/${requestId}/done?score=${score}`,
         null,
         {
           headers: {
@@ -149,6 +149,7 @@ const ClientRequest = () => {
           },
         }
       );
+      window.location.reload();
       console.log("Assignment Response:", markResponse);
     } catch (error) {
       console.error("does not work getting error: ", error);
@@ -735,12 +736,19 @@ const ClientRequest = () => {
                       >
                         Delete
                       </Button>
-                      <Button
+                      {request.isActive ? <Button
                         variant="success"
-                        onClick={() => handleMarkAsDone(request.requestId, 10)}
+                        onClick={() => handleMarkAsDone(request.requestId, 5)}
                       >
                         Mark As Done
-                      </Button>
+                      </Button> : 
+                      <Button
+                      disabled
+                      variant="success"
+                      onClick={() => handleMarkAsDone(request.requestId, 5)}
+                    >
+                      Mark As Done
+                    </Button>}
                     </Modal.Footer>
                   </Modal>
                 </div>
