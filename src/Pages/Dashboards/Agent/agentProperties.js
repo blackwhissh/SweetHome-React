@@ -339,7 +339,7 @@ const AgentProperties = () => {
                           className="button-33"
                           onClick={() => fetchData(property.propertyId)}
                         >
-                          Property {property.propertyId} Match
+                          Match Property
                         </button>
                       ) : (
                         <span>{property.agentId}</span>
