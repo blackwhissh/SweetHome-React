@@ -62,7 +62,7 @@ const ShowAgents = () => {
       console.log("Agent ID:", agentId);
       console.log("Type of Agent ID:", typeof agentId);
 
-      const assignResponse = await axios.post(
+      const assignResponse = await axios.put(
         `http://localhost:8081/api/owner/properties/${propertyId}/assign?agentId=${agentId}`,
         null,
         {

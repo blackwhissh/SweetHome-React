@@ -21,7 +21,7 @@ const OwnerRequest = () => {
     console.log(propertyId);
     try {
       const markResponse = await axios.put(
-        `http://localhost:8081/api/client/requests/${propertyId}/done?score=${score}`,
+        `http://localhost:8081/api/owner/properties/${propertyId}/done?score=${score}`,
         null,
         {
           headers: {
